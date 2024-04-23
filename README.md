@@ -22,7 +22,7 @@ If a vtuber has a concurrent viewers of 9, then the N-view is 1, if 99, then 2, 
 2. Clone the repository or download the source code:
 
 ```bash
-git clone https://github.com/amicus-veritatis/nview.git
+git clone https://github.com/vtmetrics/nview.git
 ```
 
 3. Navigate to the project directory:
