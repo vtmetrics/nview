@@ -18,12 +18,12 @@ type VTuber struct {
 	// "Indie" for unaffiliated
 	Affiliation string `json:"affiliation"`
 	CCV         int    `json:"ccv"`
-	NView       int    `json:"n_view"`
+	NView       float64    `json:"n_view"`
 	vtStatsID   VtStatsVtuberID
 }
 
 func (vt *VTuber) String() string {
-	return fmt.Sprintf("%v (%v) is a %vview (with %v CCV)", vt.Name, vt.Affiliation, vt.NView, vt.CCV)
+	return fmt.Sprintf("%v (%v) is a %.1fview (with %v CCV)", vt.Name, vt.Affiliation, vt.NView, vt.CCV)
 }
 
 func main() {
@@ -181,7 +181,7 @@ func fetchCatalog() (VtStatsCatalog, error) {
 	return catalog, nil
 }
 
-func (vt *VTuber) updateNView() int {
+func (vt *VTuber) updateNView() float64 {
 	vt.NView = computeNView(vt.CCV)
 	return vt.NView
 }
@@ -233,11 +233,14 @@ func computeCCV(channelIDs []string) (int, error) {
 	return ccv, nil
 }
 
-func computeNView(ccv int) int {
+func computeNView(ccv int) float64 {
+	if ccv < 0 {
+		return math.NaN()
+	}
 	if ccv == 0 {
 		return 0
 	}
-	return int(math.Log10(float64(ccv))) + 1
+	return max(math.Log10(float64(ccv)) + 1, 0.0)
 }
 
 func (ct VtStatsCatalog) getIDInfo(name string) (VtStatsVtuberID, error) {
