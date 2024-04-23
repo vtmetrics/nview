@@ -16,9 +16,9 @@ import (
 type VTuber struct {
 	Name string `json:"name"`
 	// "Indie" for unaffiliated
-	Affiliation string `json:"affiliation"`
-	CCV         int    `json:"ccv"`
-	NView       float64    `json:"n_view"`
+	Affiliation string  `json:"affiliation"`
+	CCV         int     `json:"ccv"`
+	NView       float64 `json:"n_view"`
 	vtStatsID   VtStatsVtuberID
 }
 
@@ -240,7 +240,7 @@ func computeNView(ccv int) float64 {
 	if ccv == 0 {
 		return 0
 	}
-	return max(math.Log10(float64(ccv)) + 1, 0.0)
+	return max(math.Log10(float64(ccv))+1, 0.0)
 }
 
 func (ct VtStatsCatalog) getIDInfo(name string) (VtStatsVtuberID, error) {
@@ -296,8 +296,11 @@ func (ct VtStatsCatalog) getIDInfo(name string) (VtStatsVtuberID, error) {
 }
 
 func (ct VtStatsCatalog) getAffiliation(groupID string) string {
-	if groupID == "others" {
-		return "Indie"
+	switch groupID {
+	case
+		"others",
+		"illustrator":
+		return "indie"
 	}
 	for _, group := range ct.Groups {
 		if group.GroupID == groupID {
